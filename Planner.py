@@ -2,6 +2,7 @@ import customtkinter as ctk
 import json
 import os
 import time
+import sys
 from PIL import Image
 
 # Item visual da lista de tarefas
@@ -107,9 +108,18 @@ class PlannerApp(ctk.CTk):
 		super().__init__()
 		ctk.set_appearance_mode("light")
 		ctk.set_default_color_theme("blue")
+		self.iconbitmap()
 		self.protocol("WM_DELETE_WINDOW", self.on_close)
 		self.create_widgets()
 		self.load_tasks()
+		self.iconbitmap(self.resource_path("icons/icon.ico"))
+	
+	def resource_path(self,relative_path):
+		if hasattr(sys, '_MEIPASS'):
+			# Quando for empacotado (cx_Freeze / PyInstaller)
+			return os.path.join(sys._MEIPASS, relative_path)
+		
+		return os.path.join(os.path.abspath("."), relative_path)
 
 	def on_close(self):
 		self.save_tasks()
